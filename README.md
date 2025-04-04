@@ -7,10 +7,22 @@ Table of contents:
   - [Interpretation of dots in file names](#interpretation-of-dots-in-file-names)
   - [Redundant “partials” prefix in partial calls](#redundant-partials-prefix-in-partial-calls)
 - [Inline partials](#inline-partials)
+- [Calling embedded partial templates](#calling-embedded-partial-templates)
 
 ## Introduction
 
+Hugo v0.146.0 introduces a redesigned template system focused on making template lookups more consistent and easier to understand.
 
+Key changes include:
+
+- Template resolution now considers the full path of content files, not just the top-level section or content type.
+- Base templates, page templates, shortcodes, render hooks now follow the same template lookup logic. This allows for more consistent naming conventions across template types.
+- The `shortcodes` and `partial` directories have been renamed to `_shortcodes` and `_partials`.
+- The `_shortcodes` and `_markup` directories can now be placed at any level within the project's file structure.
+- The concept of `_internal` templates has been removed. See [details]((#calling-embedded-partial-templates).
+- A new `all` template acts as a fallback when a specific template for a page kind is not found.
+
+The new template system is generally backwards compatible, except for the documented breaking changes listed below. Please be aware that due to the vast range of existing template implementations, some unforeseen edge cases might not be fully compatible.
 
 ## Breaking changes
 
@@ -68,14 +80,13 @@ Review your templates and ensure all partial calls omit the `partials/` prefix. 
 {{ partial "foo.html" }}
 ```
 
-
 ## Directory structure
 
-
+TODO
 
 ## Lookup order / weights / something
 
-
+TODO
 
 ## Inline partials
 
@@ -103,10 +114,38 @@ To this:
 
 Remember that inline partials possess global scope; they can be called from any template, regardless of where they are defined. Exercise caution with naming to prevent namespace collisions.
 
+## Calling embedded partial templates
+
+Starting with v0.146.0, the way you call Hugo's embedded partial templates has been standardized. Instead of using the `template` function and the `_internal/` prefix, you now use the familiar `partial` function.
+
+Old syntax:
+
+```text
+{{ template "_internal/disqus.html" . }}
+{{ template "_internal/google_analytics.html" . }}
+{{ template "_internal/opengraph.html" . }}
+{{ template "_internal/pagination.html" . }}
+{{ template "_internal/schema.html" . }}
+{{ template "_internal/twitter_cards.html" . }}
+```
+
+New syntax:
+
+```text
+{{ partial "disqus.html" . }}
+{{ partial "google_analytics.html" . }}
+{{ partial "opengraph.html" . }}
+{{ partial "pagination.html" . }}
+{{ partial "schema.html" . }}
+{{ partial "twitter_cards.html" . }}
+```
+
+This change applies to all built-in partials (Disqus, Google Analytics, OpenGraph, Pagination, Schema, Twitter Cards) and makes their usage consistent with your custom partials.
+
+Note that the old syntax still works, but it will be deprecated in a future release.
+
 ## Other (these may need their own top level section)
 
 Standard layout "all". See <https://github.com/gohugoio/hugo/issues/13545>.
-
-Deprecate "_internal". See <https://github.com/gohugoio/hugo/issues/13553>.
 
 Templates in content. See <https://github.com/gohugoio/hugo/issues/13543>.
