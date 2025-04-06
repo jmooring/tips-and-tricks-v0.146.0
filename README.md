@@ -16,10 +16,11 @@ Hugo v0.146.0 introduces a redesigned template system focused on making template
 Key changes include:
 
 - Template resolution now considers the full path of content files, not just the top-level section or content type.
-- Base templates, page templates, shortcodes, render hooks now follow the same template lookup logic. This allows for more consistent naming conventions across template types.
+- Base templates, page templates, content views, shortcodes, render hooks now follow the same template lookup logic. This allows for more consistent naming conventions across template types.
 - The `shortcodes` and `partial` directories have been renamed to `_shortcodes` and `_partials`.
-- The `_shortcodes` and `_markup` directories can now be placed at any level within the project's file structure.
-- The concept of `_internal` templates has been removed. See [details]((#calling-embedded-partial-templates).
+- The `_shortcodes` and `_markup` directories can now be placed at any level within the project's `layouts` directory.
+- The concept of `_internal` templates has been removed. See [details](#calling-embedded-partial-templates).
+- Templates named `index` are ignored. Use `home` instead.
 - A new `all` template acts as a fallback when a specific template for a page kind is not found.
 
 The new template system is generally backwards compatible, except for the documented breaking changes listed below. Please be aware that due to the vast range of existing template implementations, some unforeseen edge cases might not be fully compatible.
@@ -79,6 +80,22 @@ Review your templates and ensure all partial calls omit the `partials/` prefix. 
 ```text
 {{ partial "foo.html" }}
 ```
+
+### Inline partial overrides removed
+
+#### Change
+
+The ability to override partial templates located in the `layouts/_partials` directory using inline partials has been removed. Previously, this undocumented behavior allowed inline partials (called without a file extension) to take precedence.
+
+This change is expected to impact a small number of sites.
+
+#### New behavior
+
+Partial templates within the `layouts/_partials` directory will now consistently be used instead of any inline partials with the same name.
+
+#### Required action
+
+If you have inline partials that share names with files in your `layouts/_partials` directory, you will need to rename your inline partials to prevent naming conflicts.
 
 ## Directory structure
 
@@ -140,7 +157,7 @@ New syntax:
 {{ partial "twitter_cards.html" . }}
 ```
 
-This change applies to all built-in partials (Disqus, Google Analytics, OpenGraph, Pagination, Schema, Twitter Cards) and makes their usage consistent with your custom partials.
+This change applies to all embedded partials (Disqus, Google Analytics, OpenGraph, Pagination, Schema, Twitter Cards) and makes their usage consistent with your custom partials.
 
 Note that the old syntax still works, but it will be deprecated in a future release.
 
