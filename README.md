@@ -1,3 +1,9 @@
++++
+title = 'Home'
+date = 2023-01-01T08:00:00-07:00
+draft = false
++++
+
 # Introducing the new template system in v0.146.0
 
 Table of contents:
@@ -6,6 +12,7 @@ Table of contents:
 - [Breaking changes](#breaking-changes)
   - [Interpretation of dots in file names](#interpretation-of-dots-in-file-names)
   - [Redundant “partials” prefix in partial calls](#redundant-partials-prefix-in-partial-calls)
+  - [Inline partial overrides removed](#inline-partial-overrides-removed)
 - [Inline partials](#inline-partials)
 - [Calling embedded partial templates](#calling-embedded-partial-templates)
 
@@ -164,5 +171,3 @@ Note that the old syntax still works, but it will be deprecated in a future rele
 ## Other (these may need their own top level section)
 
 Standard layout "all". See <https://github.com/gohugoio/hugo/issues/13545>.
-
-Templates in content. See <https://github.com/gohugoio/hugo/issues/13543>.
